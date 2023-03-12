@@ -324,75 +324,75 @@ class ScaffoldCommand extends Command
     }
 
     protected function dropController(){
-        $name = ucfirst($this->argument('name'));
-        $controllerFile = app_path("Http/Controllers/{$name}.php");
+        $entity = ucfirst($this->argument('entity'));
+        $controllerFile = app_path("Http/Controllers/{$entity}.php");
 
         if (File::exists($controllerFile)) {
             File::delete($controllerFile);
-            $this->info("Controller '{$name}' deleted.");
+            $this->info("Controller '{$entity}' deleted.");
         } else {
-            $this->error("Controller '{$name}' not found.");
+            $this->error("Controller '{$entity}' not found.");
         }
 
-        $viewsPath = resource_path("views/{$name}");
+        $viewsPath = resource_path("views/{$entity}");
         if (File::exists($viewsPath)) {
             File::deleteDirectory($viewsPath);
-            $this->info("Views for '{$name}' deleted.");
+            $this->info("Views for '{$entity}' deleted.");
         }
     }
 
     protected function dropViews(){
-        $name = ucfirst($this->argument('name'));
-        $controllerFile = app_path("Http/Controllers/{$name}.php");
+        $entity = ucfirst($this->argument('entity'));
+        $controllerFile = app_path("Http/Controllers/{$entity}.php");
 
         if (File::exists($viewsPath)) {
             File::deleteDirectory($viewsPath);
-            $this->info("Views for '{$name}' deleted.");
+            $this->info("Views for '{$entity}' deleted.");
         }
     }
     
     protected function dropModel(){
-        $name = ucfirst($this->argument('name'));
-        $modelFile = app_path("Models/{$name}Controller.php");
+        $entity = ucfirst($this->argument('entity'));
+        $modelFile = app_path("Models/{$entity}Controller.php");
 
         if (File::exists($modelFile)) {
             File::delete($modelFile);
-            $this->info("Model '{$name}' deleted.");
+            $this->info("Model '{$entity}' deleted.");
         } else {
-            $this->error("Model '{$name}' not found.");
+            $this->error("Model '{$entity}' not found.");
         }
     }
 
     protected function dropResources(){
-        $name = ucfirst($this->argument('name'));
-        $ResourceFile = app_path("Resources/{$name}Resource.php");
+        $entity = ucfirst($this->argument('entity'));
+        $ResourceFile = app_path("Resources/{$entity}Resource.php");
         
         if (File::exists($ResourceFile)) {
             File::delete($ResourceFile);
-            $this->info("Resource '{$name}' deleted.");
+            $this->info("Resource '{$entity}' deleted.");
         } else {
-            $this->error("Resource '{$name}' not found.");
+            $this->error("Resource '{$entity}' not found.");
         }
         
-        $CollectionFile = app_path("Resources/{$name}Collection.php");
+        $CollectionFile = app_path("Resources/{$entity}Collection.php");
 
         if (File::exists($CollectionFile)) {
             File::delete($CollectionFile);
-            $this->info("Collection '{$name}' deleted.");
+            $this->info("Collection '{$entity}' deleted.");
         } else {
-            $this->error("Collection '{$name}' not found.");
+            $this->error("Collection '{$entity}' not found.");
         }
     }
 
     protected function dropTest(){
-        $name = ucfirst($this->argument('name'));
-        $testFile = app_path("../tests/Feature/CategoryTest/{$name}Test.php");
+        $entity = ucfirst($this->argument('entity'));
+        $testFile = app_path("../tests/Feature/CategoryTest/{$entity}Test.php");
         
         if (File::exists($testFile)) {
             File::delete($testFile);
-            $this->info("Test '{$name}' deleted.");
+            $this->info("Test '{$entity}' deleted.");
         } else {
-            $this->error("Test '{$name}' not found.");
+            $this->error("Test '{$entity}' not found.");
         }
     }
 }
