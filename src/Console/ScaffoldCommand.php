@@ -142,6 +142,7 @@ class ScaffoldCommand extends Command
             $this->dropResources();
             $this->dropTest();
             $this->dropMigrate();
+            $this->dropRouter();
         }
         else{
             $this->validateInput();
@@ -157,6 +158,7 @@ class ScaffoldCommand extends Command
             }
 
             $this->scaffoldTest();
+            $this->scaffoldRouter();
 
             $this->composer->dumpAutoloads();
         }
@@ -326,6 +328,35 @@ class ScaffoldCommand extends Command
     }
 
     /**
+     * add router.
+     */
+    protected function scaffoldRouter()
+    {
+        $entity = ucfirst($this->argument('entity'));
+        $table = Str::plural(strtolower($entity));
+        if ($this->option('api') || config('scaffold.controller', 'resource') === 'api') {
+            $route="\nRoute::apiResource('{$table}',\App\Http\Controllers\\".$entity."Controller::class);\n";
+            $routes_file_path = base_path('routes/api.php');
+            $routes_file = file_get_contents($routes_file_path);
+            if (strpos($routes_file, $route) !== false) {
+
+            } else {
+                file_put_contents($routes_file_path, $route, FILE_APPEND);
+            }
+        }
+        else{
+            $route="\nRoute::resource('{$table}',\App\Http\Controllers\\".$entity."Controller::class);\n";
+            $routes_file_path = base_path('routes/web.php');
+            $routes_file = file_get_contents($routes_file_path);
+            if (strpos($routes_file, $route) !== false) {
+
+            } else {
+                file_put_contents($routes_file_path, $route, FILE_APPEND);
+            }
+        }
+    }
+
+    /**
      * drop controller.
      */
     protected function dropController(){
@@ -418,9 +449,10 @@ class ScaffoldCommand extends Command
      * drop migrate.
      */
     protected function dropMigrate(){
-        $entity = Str::plural(strtolower($this->argument('entity')));
+        $entity = ucfirst($this->argument('entity'));
+        $table = Str::plural(strtolower($entity));
         $migrationPath = database_path('migrations');
-        $migrationFiles = File::glob("{$migrationPath}/*_create_{$entity}_table.php");
+        $migrationFiles = File::glob("{$migrationPath}/*_create_{$table}_table.php");
         if (empty($migrationFiles)) {
             $this->error("Migrate '{$entity}' not found.");
         } else {
@@ -430,4 +462,46 @@ class ScaffoldCommand extends Command
             }
         }
     }
+
+    /**
+     * drop router.
+     */
+    protected function dropRouter()
+    {
+        $entity = ucfirst($this->argument('entity'));
+        $table = Str::plural(strtolower($entity));
+        //api
+        $route="Route::apiResource('{$table}',\App\Http\Controllers\\".$entity."Controller::class);";
+        $routes_file_path = base_path('routes/api.php');
+            $routes_file = file_get_contents($routes_file_path);
+            $pos=strpos($routes_file, $route);
+
+            if ($pos !== false) {
+                $pos_end = strpos($routes_file, "\n", $pos) + 1;
+                $pos_start = ($pos==0)?0:strpos($routes_file, "\n", max($pos-1,0));
+                $route_len = $pos_end - $pos_start;
+                $route_to_remove = substr($routes_file, $pos_start, $route_len);
+                $routes_file = str_replace($route_to_remove, '', $routes_file);
+                file_put_contents($routes_file_path, $routes_file);
+                $this->info("Drop router api $entity .");
+            } else {
+                //web
+                $route="Route::resource('{$table}',\App\Http\Controllers\\".$entity."Controller::class);";
+                $routes_file_path = base_path('routes/web.php');
+                $routes_file = file_get_contents($routes_file_path);
+                $pos=strpos($routes_file, $route);
+                if ($pos !== false) {
+                    $pos_end = strpos($routes_file, "\n", $pos) + 1;
+                    $pos_start = ($pos==0)?0:strpos($routes_file, "\n", max($pos-1,0));
+                    $route_len = $pos_end - $pos_start;
+                    $route_to_remove = substr($routes_file, $pos_start, $route_len);
+                    $routes_file = str_replace($route_to_remove, '', $routes_file);
+                    file_put_contents($routes_file_path, $routes_file);
+                    $this->info("Drop router web $entity .");
+                } else {
+                    $this->error("The route for $entity does not exist.");
+                }
+           }
+    }
+
 }
