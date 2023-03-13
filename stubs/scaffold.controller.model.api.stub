@@ -57,9 +57,10 @@ class {{ class }} extends Controller
         return new {{ modelResource }}(${{ modelVariable }});
     }
 
-    public function update(Request $request, $id)
+ public function update(Request $request, $id)
     {
         try{
+            return response()->json(['success' => true, 'message' => true, 'data' =>  json_encode($request)], Response::HTTP_BAD_REQUEST);
             $data= new {{ modelResource }}(
                 {{ model }}::findOrfail($id)->update($request->all())
             );
@@ -72,7 +73,6 @@ class {{ class }} extends Controller
             return response()->json(['error' => true, 'message' => false, 'data' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -82,7 +82,7 @@ class {{ class }} extends Controller
     public function destroy({{ model }} ${{ modelVariable }})
     {
         try{
-            ${{ modelVariable }}->delete();
+            ${{ modelVariable }}=${{ modelVariable }}->delete();
             if (${{ modelVariable }}) {
                 return response()->json(['success' => true, 'message' => true, 'data' => ${{ modelVariable }}], Response::HTTP_OK);
             }

@@ -109,7 +109,7 @@ class {{ class }} extends Controller
     public function destroy({{ model }} ${{ modelVariable }})
     {
         try{
-            ${{ modelVariable }}->delete();
+            ${{ modelVariable }}=${{ modelVariable }}->delete();
             if (${{ modelVariable }}) {
                 return response()->json(['success' => true, 'message' => true, 'data' => ${{ modelVariable }}], Response::HTTP_OK);
             }
