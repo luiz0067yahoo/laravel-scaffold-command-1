@@ -112,7 +112,7 @@ class ScaffoldCommand extends Command
      */
     protected $composer;
 
-	
+
     /**
      * Create a new migration install command instance.
      *
@@ -141,6 +141,7 @@ class ScaffoldCommand extends Command
             $this->dropModel();
             $this->dropResources();
             $this->dropTest();
+            $this->dropMigrate();
         }
         else{
             $this->validateInput();
@@ -156,7 +157,7 @@ class ScaffoldCommand extends Command
             }
 
             $this->scaffoldTest();
-            
+
             $this->composer->dumpAutoloads();
         }
     }
@@ -181,14 +182,14 @@ class ScaffoldCommand extends Command
             $this->validateFields($fieldsInput, $this->filteredFields($fieldsInput));
         }
     }
-    
+
     /**
-     * validate if given fields is correct. field should specify type 
+     * validate if given fields is correct. field should specify type
      * and the type should be one of accepted ones.
-     * 
+     *
      * @param array $fields
      * @param array $filteredField
-     * 
+     *
      * @throws InvalidArgumentException
      */
     protected function validateFields(array $fields, array $filteredField)
@@ -199,10 +200,10 @@ class ScaffoldCommand extends Command
 
     /**
      * validate if given fields specified type.
-     * 
+     *
      * @param array $fields
      * @param array $filteredField
-     * 
+     *
      * @throws InvalidArgumentException
      */
     protected function validateFieldHasType(array $fields, array $filteredField)
@@ -214,9 +215,9 @@ class ScaffoldCommand extends Command
 
     /**
      * validate if given fields type is one of accepted ones.
-     * 
+     *
      * @param array $fields
-     * 
+     *
      * @throws InvalidArgumentException
      */
     protected function validateFieldTypeIsCorrect(array $fields)
@@ -230,9 +231,9 @@ class ScaffoldCommand extends Command
 
     /**
      * filter fields not contains type.
-     * 
+     *
      * @param array $fields
-     * 
+     *
      * @return array
      */
     protected function filteredFields(array $fields)
@@ -324,9 +325,12 @@ class ScaffoldCommand extends Command
         ]);
     }
 
+    /**
+     * drop controller.
+     */
     protected function dropController(){
         $entity = ucfirst($this->argument('entity'));
-        $controllerFile = app_path("Http/Controllers/{$entity}.php");
+        $controllerFile = app_path("Http/Controllers/{$entity}Controller.php");
 
         if (File::exists($controllerFile)) {
             File::delete($controllerFile);
@@ -334,27 +338,32 @@ class ScaffoldCommand extends Command
         } else {
             $this->error("Controller '{$entity}' not found.");
         }
-
-        $viewsPath = resource_path("views/{$entity}");
-        if (File::exists($viewsPath)) {
-            File::deleteDirectory($viewsPath);
-            $this->info("Views for '{$entity}' deleted.");
-        }
     }
 
+
+    /**
+     * drop views.
+     */
     protected function dropViews(){
         $entity = ucfirst($this->argument('entity'));
-        $controllerFile = app_path("Http/Controllers/{$entity}.php");
+        $viewsPath = resource_path("views/{$entity}");
 
         if (File::exists($viewsPath)) {
             File::deleteDirectory($viewsPath);
             $this->info("Views for '{$entity}' deleted.");
         }
+        else{
+            $this->error("Views for '{$entity}' not found.");
+        }
     }
-    
+
+
+    /**
+     * drop model.
+     */
     protected function dropModel(){
         $entity = ucfirst($this->argument('entity'));
-        $modelFile = app_path("Models/{$entity}Controller.php");
+        $modelFile = app_path("Models/{$entity}.php");
 
         if (File::exists($modelFile)) {
             File::delete($modelFile);
@@ -364,18 +373,22 @@ class ScaffoldCommand extends Command
         }
     }
 
+
+    /**
+     * drop resources.
+     */
     protected function dropResources(){
         $entity = ucfirst($this->argument('entity'));
-        $ResourceFile = app_path("Resources/{$entity}Resource.php");
-        
+        $ResourceFile = app_path("Http/Resources/{$entity}Resource.php");
+
         if (File::exists($ResourceFile)) {
             File::delete($ResourceFile);
             $this->info("Resource '{$entity}' deleted.");
         } else {
             $this->error("Resource '{$entity}' not found.");
         }
-        
-        $CollectionFile = app_path("Resources/{$entity}Collection.php");
+
+        $CollectionFile = app_path("Http/Resources/{$entity}Collection.php");
 
         if (File::exists($CollectionFile)) {
             File::delete($CollectionFile);
@@ -385,15 +398,36 @@ class ScaffoldCommand extends Command
         }
     }
 
+
+    /**
+     * drop test.
+     */
     protected function dropTest(){
         $entity = ucfirst($this->argument('entity'));
-        $testFile = app_path("../tests/Feature/CategoryTest/{$entity}Test.php");
-        
+        $testFile = app_path("../tests/Feature/{$entity}Test.php");
+        //$this->info("Test '{$testFile}'");
         if (File::exists($testFile)) {
             File::delete($testFile);
             $this->info("Test '{$entity}' deleted.");
         } else {
             $this->error("Test '{$entity}' not found.");
+        }
+    }
+
+    /**
+     * drop migrate.
+     */
+    protected function dropMigrate(){
+        $entity = Str::plural(strtolower($this->argument('entity')));
+        $migrationPath = database_path('migrations');
+        $migrationFiles = File::glob("{$migrationPath}/*_create_{$entity}_table.php");
+        if (empty($migrationFiles)) {
+            $this->error("Migrate '{$entity}' not found.");
+        } else {
+            foreach ($migrationFiles as $file) {
+                $this->info("Migrate '{$entity}' deleted.");
+                File::delete($file);
+            }
         }
     }
 }
