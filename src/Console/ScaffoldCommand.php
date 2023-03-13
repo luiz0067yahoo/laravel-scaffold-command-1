@@ -150,10 +150,9 @@ class ScaffoldCommand extends Command
             $this->scaffoldModel();
             $this->scaffoldMigration();
             $this->scaffoldController();
+            $this->scaffoldResources();
 
-            if ($this->option('api') || config('scaffold.controller', 'resource') === 'api') {
-                $this->scaffoldResources();
-            } else {
+            if (!($this->option('api') || config('scaffold.controller', 'resource') === 'api')) {
                 $this->scaffoldViews();
             }
 
@@ -313,6 +312,8 @@ class ScaffoldCommand extends Command
                     $this->call('scaffold:view', [
                         'name' => $this->argument('entity'),
                         '--file' => $item,
+                        '--field' => $this->option('field'),
+                        '--fields' => $this->option('fields'),
                     ]);
                 });
     }

@@ -4,7 +4,10 @@ namespace {{ namespace }};
 
 use {{ namespacedModel }};
 use {{ rootNamespace }}Http\Controllers\Controller;
+use {{ rootNamespace }}Http\Resources\{{ modelResourceCollection }};
+use {{ rootNamespace }}Http\Resources\{{ modelResource }};
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class {{ class }} extends Controller
 {
@@ -30,7 +33,7 @@ class {{ class }} extends Controller
         return view('{{ modelVariable }}.create');
     }
 
-    /**
+     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -38,9 +41,17 @@ class {{ class }} extends Controller
      */
     public function store(Request $request)
     {
-        {{ model }}::create($request->all());
-
-        return back();
+        try{
+            $data= new {{ modelResource }}(
+                {{ model }}::create($request->all())
+            );
+            if ($data) {
+                return response()->json(['success' => true, 'message' => true, 'data' => $data], Response::HTTP_OK);
+            }
+            return response()->json(['error' => true, 'message' => false, 'data' => []], Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => false, 'data' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -65,18 +76,28 @@ class {{ class }} extends Controller
         return view('{{ modelVariable }}.edit', compact('{{ modelVariable }}'));
     }
 
-    /**
+   /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \{{ namespacedModel }}  ${{ modelVariable }}
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, {{ model }} ${{ modelVariable }})
+    public function update(Request $request, $id)
     {
-        ${{ modelVariable }}->update($request->all());
+        try{
+            return response()->json(['success' => true, 'message' => true, 'data' =>  json_encode($request)], Response::HTTP_BAD_REQUEST);
+            $data= new {{ modelResource }}(
+                {{ model }}::findOrfail($id)->update($request->all())
+            );
 
-        return back();
+            if ($data) {
+                return response()->json(['success' => true, 'message' => true, 'data' => $data], Response::HTTP_OK);
+            }
+            return response()->json(['error' => true, 'message' => false, 'data' => []], Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => false, 'data' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -87,8 +108,14 @@ class {{ class }} extends Controller
      */
     public function destroy({{ model }} ${{ modelVariable }})
     {
-        ${{ modelVariable }}->delete();
-
-        return back();
+        try{
+            ${{ modelVariable }}->delete();
+            if (${{ modelVariable }}) {
+                return response()->json(['success' => true, 'message' => true, 'data' => ${{ modelVariable }}], Response::HTTP_OK);
+            }
+            return response()->json(['error' => true, 'message' => false, 'data' => []], Response::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => false, 'data' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

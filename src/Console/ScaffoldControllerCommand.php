@@ -88,13 +88,11 @@ class ScaffoldControllerCommand extends GeneratorCommand
         $replace = $this->buildModelReplacements($replace = []);
 
         $replace["use {$controllerNamespace}\Controller;\n"] = '';
+        $replace["{{ modelResourceCollection }}"] = $this->option('entity').'Collection';
+        $replace["{{modelResourceCollection}}"] = $this->option('entity').'Collection';
+        $replace["{{modelResource}}"] = $this->option('entity').'Resource';
+        $replace["{{ modelResource }}"] = $this->option('entity').'Resource';
 
-        if ($this->option('api')) {
-            $replace["{{ modelResourceCollection }}"] = $this->option('entity').'Collection';
-            $replace["{{modelResourceCollection}}"] = $this->option('entity').'Collection';
-            $replace["{{modelResource}}"] = $this->option('entity').'Resource';
-            $replace["{{ modelResource }}"] = $this->option('entity').'Resource';
-        }
 
         return str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)

@@ -1,0 +1,44 @@
+@php
+ $columns={{ columns }};
+@endphp
+<h1><center>Create {{ model }}</center></h1>
+<br>
+<br>
+<a href="/{{ modelPlural }}"><button>back</button></a>
+<form id="form_{{ model }}_create" method="post" action="/{{ modelPlural }}" onSubmit="submitAjax(event);">
+    @csrf
+    <table style="width:100%;text-align: end;">
+        <tbody>
+            @foreach($columns as $key)
+                <tr>
+                    <td style="width:50%">{{ $key }}: </td>
+                    <td style="width:50%"><input type="text" name="{{ $key }}" style="width:100%"></td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <h4><center><button type="submit">save</button></center></h4>
+</form>
+<script>
+    function submitAjax(){
+        event.preventDefault();
+        var form = document.querySelector('#form_{{ model }}_create');
+        var formData = new FormData(form);
+        fetch(form.action, {
+            headers: {
+                'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "X-CSRF-Token": document.querySelector('input[name="_token"]').value,
+            },
+            method: "POST",
+            credentials: "same-origin",
+            body: formData
+        }).then((r) => {
+                if ((r.ok) ){
+                    location.href ="/{{ modelPlural }}";
+                } else {
+                    r.json().then((e) => console.log(e.data))
+                }
+        }).catch((r) => console.log(r))
+    }
+</script>

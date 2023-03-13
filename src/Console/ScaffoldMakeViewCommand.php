@@ -3,17 +3,24 @@
 namespace Scaffolding\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use InvalidArgumentException;
 use Illuminate\Support\Str;
+use Scaffolding\Traits\UseField;
 use Symfony\Component\Console\Input\InputOption;
+
 
 class ScaffoldMakeViewCommand extends GeneratorCommand
 {
+    use UseField;
     /**
      * The console command name.
      *
      * @var string
      */
+
     protected $signature = 'scaffold:view {name : The name of entity}
+                                        {--field=* : Generate columns with this option (e.x. name:string)}
+                                        {--fields= : Generate columns with this option (e.x. name:string,email:string)}
                                         {--remove : drop files Views}
                                         {--file : The name of file}';
 
@@ -60,13 +67,16 @@ class ScaffoldMakeViewCommand extends GeneratorCommand
      * @param  string  $name
      * @return string
      */
-    protected function populateViewStub($name, $stub)
+    protected function populateViewStub($name, $stub, $fieldString)
     {
+
         $replace = [
             '{{ modelPlural }}' => Str::plural(lcfirst($name)),
             '{{modelPlural}}' => Str::plural(lcfirst($name)),
             '{{ model }}' => lcfirst($name),
             '{{model}}' => lcfirst($name),
+            '{{ columns }}' => $fieldString,
+            '{{columns}}' => $fieldString,
         ];
 
         return str_replace(
@@ -93,12 +103,14 @@ class ScaffoldMakeViewCommand extends GeneratorCommand
     {
         $file = $this->option('file');
         $name = $this->argument('name');
-		
+
 		$stub = $this->getStub();
         $path = $this->getViewPath($name, $file);
-        
-        $stub = $this->populateViewStub($name, $this->files->get($stub));
-		
+
+        $this->info(json_encode($this->option('fields')));
+        $fieldString = "[".($this->getStringColumns($this->option('field'), $this->option('fields')))."]";
+        $stub = $this->populateViewStub($name, $this->files->get($stub), $fieldString);
+
         $this->files->put(
             $path, $stub
         );
