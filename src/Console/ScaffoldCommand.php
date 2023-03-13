@@ -5,6 +5,7 @@ namespace Scaffolding\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 use InvalidArgumentException;
 
 class ScaffoldCommand extends Command
