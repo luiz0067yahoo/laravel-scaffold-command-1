@@ -35,16 +35,16 @@
 <script>
     function submitAjax(){
         event.preventDefault();
-        var form = document.querySelector('#form_{{ model }}_delete');
-        var formData = new FormData(form);
+        var form = document.querySelector('#form_category_delete');
+        var data = Object.fromEntries((new FormData(form)).entries());
+        console.log(data);
         fetch(form.action, {
             headers: {
-                'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Content-Type': 'application/json',
                 "X-CSRF-Token": document.querySelector('input[name="_token"]').value,
             },
             method: "DELETE",
-            credentials: "same-origin",
+            body: JSON.stringify(data),
         }).then((r) => {
                 if ((r.ok) ){
                     location.href ="/{{ modelPlural }}";

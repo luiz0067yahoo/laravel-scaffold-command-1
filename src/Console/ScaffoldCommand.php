@@ -277,6 +277,8 @@ class ScaffoldCommand extends Command
         $this->call('scaffold:controller', [
             'name' => $this->argument('entity').'Controller',
             '--entity' => $this->argument('entity'),
+            '--field' => $this->option('field'),
+            '--fields' => $this->option('fields'),
             '--api' => $this->option('api'),
         ]);
     }

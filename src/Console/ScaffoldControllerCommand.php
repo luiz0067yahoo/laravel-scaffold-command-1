@@ -5,9 +5,12 @@ namespace Scaffolding\Console;
 use Illuminate\Console\GeneratorCommand;
 use InvalidArgumentException;
 use Illuminate\Support\Str;
+use Scaffolding\Traits\UseField;
+use Symfony\Component\Console\Input\InputOption;
 
 class ScaffoldControllerCommand extends GeneratorCommand
 {
+	 use UseField;
     /**
      * The console command name.
      *
@@ -15,6 +18,8 @@ class ScaffoldControllerCommand extends GeneratorCommand
      */
     protected $signature = 'scaffold:controller {name : The name of controller}
                                             {--entity : The name of entity}
+                                            {--field=* : Generate columns with this option (e.x. name:string)}
+                                            {--fields= : Generate columns with this option (e.x. name:string,email:string)}
                                             {--api : Generate api crud controller with resourses}
                                             {--remove : drop file controller}
                                             {--force : Create the class even if the model already exists}';
@@ -87,12 +92,15 @@ class ScaffoldControllerCommand extends GeneratorCommand
 
         $replace = $this->buildModelReplacements($replace = []);
 
+        $this->info(json_encode($this->option('fields')));
+        $fieldString = "[".($this->getStringColumns($this->option('field'), $this->option('fields')))."]";
         $replace["use {$controllerNamespace}\Controller;\n"] = '';
         $replace["{{ modelResourceCollection }}"] = $this->option('entity').'Collection';
         $replace["{{modelResourceCollection}}"] = $this->option('entity').'Collection';
         $replace["{{modelResource}}"] = $this->option('entity').'Resource';
         $replace["{{ modelResource }}"] = $this->option('entity').'Resource';
-
+        $replace["{{ columns }}"] = $fieldString;
+        $replace["{{columns}}"] = $fieldString;
 
         return str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)

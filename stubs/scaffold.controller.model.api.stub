@@ -6,8 +6,8 @@ use {{ namespacedModel }};
 use {{ rootNamespace }}Http\Controllers\Controller;
 use {{ rootNamespace }}Http\Resources\{{ modelResourceCollection }};
 use {{ rootNamespace }}Http\Resources\{{ modelResource }};
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 class {{ class }} extends Controller
 {
@@ -60,12 +60,16 @@ class {{ class }} extends Controller
  public function update(Request $request, $id)
     {
         try{
-            return response()->json(['success' => true, 'message' => true, 'data' =>  json_encode($request)], Response::HTTP_BAD_REQUEST);
-            $data= new {{ modelResource }}(
-                {{ model }}::findOrfail($id)->update($request->all())
+            $columns={{ columns }};
+            $data={{ model }}::findOrfail($id);
+            foreach ($columns as $col){
+                $data[$col]=$request->input($col);
+            }
+            $result= new {{ modelResource }}(
+                $data->save()
             );
 
-            if ($data) {
+            if ($result) {
                 return response()->json(['success' => true, 'message' => true, 'data' => $data], Response::HTTP_OK);
             }
             return response()->json(['error' => true, 'message' => false, 'data' => []], Response::HTTP_NOT_FOUND);
