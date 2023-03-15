@@ -6,8 +6,8 @@ use {{ namespacedModel }};
 use {{ rootNamespace }}Http\Controllers\Controller;
 use {{ rootNamespace }}Http\Resources\{{ modelResourceCollection }};
 use {{ rootNamespace }}Http\Resources\{{ modelResource }};
-use {{ rootNamespace }}Http\Request;
-use {{ rootNamespace }}Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class {{ class }} extends Controller
 {
