@@ -18,7 +18,8 @@
 
 ## installation
 ```bash
-composer require tefoh/laravel-scaffold-command
+composer require luiz0067yahoo/laravel-scaffold-command-1
+php artisan vendor:publish --tag=scaffold-stubs
 ```
 next
 ```bash
