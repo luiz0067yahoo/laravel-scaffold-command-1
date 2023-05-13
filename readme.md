@@ -16,12 +16,6 @@
     - resource collection class
 
 
-## installation
-```bash
-composer require 4mm/laravel-10-scaffold-commands
-php artisan vendor:publish --tag=scaffold-stubs
-```
-next
 ```bash
 php artisan vendor:publish --tag=scaffold-stubs
 ```
@@ -31,6 +25,9 @@ php artisan vendor:publish --tag=scaffold-stubs
 php artisan scaffold {your entity name}
 
 like php artisan scaffold Category --fields=name:string,slug:string,parent_id:foreignId
+
+php artisan delete
+
+like php artisan scaffold remove Category 
+
 ```
-enjoy :)
-credits by https://github.com/Tefoh/laravel-scaffold-command
