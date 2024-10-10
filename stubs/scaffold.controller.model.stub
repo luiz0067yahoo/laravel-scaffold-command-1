@@ -71,9 +71,10 @@ class {{ class }} extends Controller
      * @param  \{{ namespacedModel }}  ${{ modelVariable }}
      * @return \Illuminate\Http\Response
      */
-    public function edit({{ model }} ${{ modelVariable }})
+    public function edit($id,{{ model }} ${{ modelVariable }})
     {
-        return view('{{ modelVariable }}.edit', compact('{{ modelVariable }}'));
+        $data={{ model }}::findOrfail($id);
+        return view('{{ modelVariable }}.edit', compact('{{ modelVariable }}','data'));
     }
 
    /**

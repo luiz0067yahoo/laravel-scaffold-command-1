@@ -5,15 +5,16 @@
 <br>
 <br>
 <a href="/{{ modelPlural }}"><button>back</button></a>
-<form id="form_{{ model }}_edit" method="post" action="/{{ modelPlural }}/{{${{ model }}["id"]}}" onSubmit="submitAjax(event);">
+<form id="form_{{ model }}_edit" method="post" action="/{{ modelPlural }}/{{$data["id"]}}" onSubmit="submitAjax(event);">
     @csrf
+    
     <input type="hidden" name="id" value="{{${{ model }}["id"]}}" style="width:100%">
     <table style="width:100%">
         <tbody>
             @foreach($columns as $key)
                 <tr>
                     <td style="width:50%;text-align: end;">{{ $key }}: </td>
-                    <td style="width:50%"><input type="text" name="{{ $key }}" value="{{${{ model }}[$key]}}" style="width:100%"></td>
+                    <td style="width:50%"><input type="text" name="{{ $key }}" value="{{$data[$key]}}" style="width:100%"></td>
                 </tr>
             @endforeach
         </tbody>

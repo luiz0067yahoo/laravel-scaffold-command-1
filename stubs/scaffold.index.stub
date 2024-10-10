@@ -22,7 +22,7 @@
                 @endforeach
                 <td style="width:90px">
                     <a href="/{{ modelPlural }}/{{${{ model }}["id"]}}/edit" style="display:block;float:left"><button>edit</button></a>
-                    <form id="form_{{ model }}_delete" method="post" action="/{{ modelPlural }}/{{${{ model }}["id"]}}" onSubmit="submitAjax()" style="display:block;float:left">
+                    <form id="form_{{ model }}_delete_{{${{ model }}["id"]}}" method="post" action="/{{ modelPlural }}/{{${{ model }}["id"]}}" onSubmit="submitAjax()" style="display:block;float:left">
                         @csrf
                         <button type="submit">delete</button>
                     </form>
@@ -34,10 +34,11 @@
 <table>
 <script>
     function submitAjax(){
-        event.preventDefault();
-        var form = document.querySelector('#form_category_delete');
-        var data = Object.fromEntries((new FormData(form)).entries());
-        console.log(data);
+        event.preventDefault(); // Impede o envio padrão do formulário
+
+        var form = event.target; // Captura o formulário que disparou o evento
+        var data = Object.fromEntries(new FormData(form).entries()); // Captura os dados do formulário
+        console.log(data); // Mostra os dados no console para verificação
         fetch(form.action, {
             headers: {
                 'Content-Type': 'application/json',
