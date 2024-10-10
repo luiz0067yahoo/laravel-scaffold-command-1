@@ -23,7 +23,7 @@
 <script>
     function submitAjax(){
         event.preventDefault();
-        var form = document.querySelector('#form_category_edit');
+        var form = document.querySelector('#form_{{ model }}_edit');
         var data = Object.fromEntries((new FormData(form)).entries());
         console.log(data);
         fetch(form.action, {
