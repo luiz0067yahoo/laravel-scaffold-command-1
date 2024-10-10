@@ -1,12 +1,12 @@
 {
-    "name": "4mm/laravel-10-scaffold-commands",
+    "name": "luiz0067/laravel-10-scaffold-commands",
     "description": "create all necessary files for crud with one command.",
     "keywords": ["laravel", "php"],
     "license": "MIT",
     "authors": [
         {
-            "name": "4mm",
-            "email": "davidson@4mmtecnologia.com.br"
+            "name": "luiz0067",
+            "email": "luiz0067@gmail.com"
         }
     ],
     "require": {
