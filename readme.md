@@ -22,12 +22,18 @@ php artisan vendor:publish --tag=scaffold-stubs
 
 ### usage
 ```bash
-php artisan scaffold {your entity name}
+php artisan scaffold your_entity_name
 
-like php artisan scaffold Category --fields=name:string,slug:string,parent_id:foreignId
+```
+like 
+```bash
+php artisan scaffold Category --fields=name:string,slug:string,parent_id:foreignId
+
+```
 
 php artisan delete
+```bash
 
-like php artisan scaffold remove Category 
+like php artisan scaffold  Category --remove
 
 ```
