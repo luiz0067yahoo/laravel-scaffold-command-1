@@ -27,9 +27,19 @@ php artisan vendor:publish --tag=scaffold-stubs
 php artisan scaffold your_entity_name
 
 ```
+or
+```bash
+php artisan scaffold your_entity_name --api
+
+```
 like 
 ```bash
 php artisan scaffold Category --fields=name:string,slug:string,parent_id:foreignId
+
+```
+or
+```bash
+php artisan scaffold Category --fields=name:string,slug:string,parent_id:foreignId --api
 
 ```
 
