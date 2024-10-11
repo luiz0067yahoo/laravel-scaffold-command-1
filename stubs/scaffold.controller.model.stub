@@ -108,19 +108,40 @@ class {{ class }} extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \{{ namespacedModel }}  ${{ modelVariable }}
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy({{ model }} ${{ modelVariable }})
+    public function destroy($id)
     {
+
         try{
-            ${{ modelVariable }}=${{ modelVariable }}->delete();
-            if (${{ modelVariable }}) {
-                return response()->json(['success' => true, 'message' => true, 'data' => ${{ modelVariable }}], Response::HTTP_OK);
+            $data={{ model }}::findOrfail($id);
+            if ($data) {
+                // Se o recurso foi encontrado, exclui-o
+                $data->delete();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => '{{ model }} deleted successfully',
+                    'data' => []
+                ], Response::HTTP_OK);
             }
-            return response()->json(['error' => true, 'message' => false, 'data' => []], Response::HTTP_NOT_FOUND);
+
+            // Retorna erro 404 se o recurso não for encontrado
+            return response()->json([
+                'error' => true,
+                'message' => '{{ model }} not found',
+                'data' => []
+            ], Response::HTTP_NOT_FOUND);
+            
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => false, 'data' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            // Captura exceções e retorna uma resposta de erro
+            return response()->json([
+                'error' => true,
+                'message' => 'An error occurred',
+                'data' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
         }
+
     }
 }
