@@ -4,6 +4,7 @@ namespace Scaffolding\Database;
 
 use Illuminate\Database\Migrations\MigrationCreator;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
 
 class ScaffoldMigrationCreator extends MigrationCreator
 {
@@ -75,6 +76,8 @@ class ScaffoldMigrationCreator extends MigrationCreator
 
         $replace = [
             'DummyClass' => $this->getClassName($name),
+	    '{{ table_name }}' => Str::snake($name),
+	    '{{table_name}}' =>Str::snake($name),
             '{{ class }}' => $this->getClassName($name),
             '{{class}}' => $this->getClassName($name),
             '{{ columns }}' => $columns,
