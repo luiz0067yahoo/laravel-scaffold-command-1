@@ -76,8 +76,6 @@ class ScaffoldMigrationCreator extends MigrationCreator
 
         $replace = [
             'DummyClass' => $this->getClassName($name),
-	    '{{ table_name }}' => Str::snake($table),
-	    '{{table_name}}' =>Str::snake($table),
             '{{ class }}' => $this->getClassName($name),
             '{{class}}' => $this->getClassName($name),
             '{{ columns }}' => $columns,
@@ -92,8 +90,8 @@ class ScaffoldMigrationCreator extends MigrationCreator
         // the developer, which is useful for quickly creating a tables creation
         // or update migration from the console instead of typing it manually.
         if (! is_null($table)) {
-            $replace['{{ table }}'] = $table;
-            $replace['{{table}}'] = $table;
+            $replace['{{ table }}'] =  Str::snake($table);
+            $replace['{{table}}'] =  Str::snake($table);
 
             $stub = str_replace(
                 array_keys($replace), array_values($replace), $stub
