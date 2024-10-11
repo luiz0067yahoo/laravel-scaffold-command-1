@@ -71,6 +71,8 @@ class ScaffoldMakeViewCommand extends GeneratorCommand
     {
 
         $replace = [
+            '{{ lowerModelPlural }}' => Str::lower(Str::plural($name)),
+            '{{lowerModelPlural}}' => Str::plural($name),
             '{{ modelPlural }}' => Str::plural(lcfirst($name)),
             '{{modelPlural}}' => Str::plural(lcfirst($name)),
             '{{ model }}' => lcfirst($name),
