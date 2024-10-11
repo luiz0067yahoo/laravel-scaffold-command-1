@@ -4,8 +4,8 @@
 <h1><center>Create {{ model }}</center></h1>
 <br>
 <br>
-<a href="/{{ modelPlural }}"><button>back</button></a>
-<form id="form_{{ model }}_create" method="post" action="/{{ modelPlural }}" onSubmit="submitAjax(event);">
+<a href="/{{ lowerModelPlural }}"><button>back</button></a>
+<form id="form_{{ model }}_create" method="post" action="/{{ lowerModelPlural }}" onSubmit="submitAjax(event);">
     @csrf
     <table style="width:100%;text-align: end;">
         <tbody>
@@ -34,7 +34,7 @@
             body: JSON.stringify(data),
         }).then((r) => {
                 if ((r.ok) ){
-                    location.href ="/{{ modelPlural }}";
+                    location.href ="/{{ lowerModelPlural }}";
                 } else {
                     r.json().then((e) => console.log(e.data))
                 }

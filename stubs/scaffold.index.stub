@@ -4,7 +4,7 @@
 <h1><center>List {{ modelPlural }}</center></h1>
 <br>
 <br>
-<h4><center><a href="/{{ modelPlural }}/create"><button>add</button></a></center></h4>
+<h4><center><a href="/{{ lowerModelPlural }}/create"><button>add</button></a></center></h4>
 <table style="width:100%" border="1">
     <thead>
         <tr>
@@ -21,8 +21,8 @@
                     <td>{{ ${{ model }}[$key] }}</td>
                 @endforeach
                 <td style="width:90px">
-                    <a href="/{{ modelPlural }}/{{${{ model }}["id"]}}/edit" style="display:block;float:left"><button>edit</button></a>
-                    <form id="form_{{ model }}_delete_{{${{ model }}["id"]}}" method="post" action="/{{ modelPlural }}/{{${{ model }}["id"]}}" onSubmit="submitAjax()" style="display:block;float:left">
+                    <a href="/{{ lowerModelPlural }}/{{${{ model }}["id"]}}/edit" style="display:block;float:left"><button>edit</button></a>
+                    <form id="form_{{ model }}_delete_{{${{ model }}["id"]}}" method="post" action="/{{ lowerModelPlural }}/{{${{ model }}["id"]}}" onSubmit="submitAjax()" style="display:block;float:left">
                         @csrf
                         <button type="submit">delete</button>
                     </form>
@@ -48,7 +48,7 @@
             body: JSON.stringify(data),
         }).then((r) => {
                 if ((r.ok) ){
-                    location.href ="/{{ modelPlural }}";
+                    location.href ="/{{ lowerModelPlural }}";
                 } else {
                     r.json().then((e) => console.log(e.data))
                 }

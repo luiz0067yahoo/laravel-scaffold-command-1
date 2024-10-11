@@ -4,8 +4,8 @@
 <h1><center>Edit {{ model }}</center></h1>
 <br>
 <br>
-<a href="/{{ modelPlural }}"><button>back</button></a>
-<form id="form_{{ model }}_edit" method="post" action="/{{ modelPlural }}/{{$data["id"]}}" onSubmit="submitAjax(event);">
+<a href="/{{ lowerModelPlural }}"><button>back</button></a>
+<form id="form_{{ model }}_edit" method="post" action="/{{ lowerModelPlural }}/{{$data["id"]}}" onSubmit="submitAjax(event);">
     @csrf
     
     <input type="hidden" name="id" value="{{${{ model }}["id"]}}" style="width:100%">
@@ -36,7 +36,7 @@
             body: JSON.stringify(data),
         }).then((r) => {
                 if ((r.ok) ){
-                    location.href ="/{{ modelPlural }}";
+                    location.href ="/{{ lowerModelPlural }}";
                 } else {
                     r.json().then((e) => console.log(e.data))
                 }
