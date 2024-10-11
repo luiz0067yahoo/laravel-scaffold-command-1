@@ -21,6 +21,7 @@ class ScaffoldMigrationCommand extends BaseCommand
     protected $signature = 'scaffold:migration {name : The name of the migration}
                                                 {--create= : The table to be created}
                                                 {--table= : The table to migrate}
+                                                {--entity : The name of entity}
                                                 {--path= : The location where the migration file should be created}
                                                 {--field=* : Generate columns with this option (e.x. name:string)}
                                                 {--fields= : Generate columns with this option (e.x. name:string,email:string)}
@@ -66,9 +67,10 @@ class ScaffoldMigrationCommand extends BaseCommand
         // It's possible for the developer to specify the tables to modify in this
         // schema operation. The developer may also specify if this table needs
         // to be freshly created so we can create the appropriate migrations.
-        $name = Str::snake(trim($this->input->getArgument('name')));
+        $name = trim($this->input->getArgument('name'));
 
-        $table = $this->input->getOption('table');
+        //$table = $this->input->getOption('table');
+        $table = $this->option('table');
 
         $create = $this->input->getOption('create') ?: false;
 

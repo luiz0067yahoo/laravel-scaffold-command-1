@@ -263,7 +263,8 @@ class ScaffoldCommand extends Command
     protected function scaffoldMigration()
     {
         $this->call('scaffold:migration', [
-            'name' => 'create_'. Str::plural(strtolower($this->argument('entity'))) .'_table',
+            'name' => $this->argument('entity'),
+            '--table' => Str::plural(Str::snake($this->argument('entity'))) ,
             '--field' => $this->option('field'),
             '--fields' => $this->option('fields'),
         ]);
@@ -455,7 +456,7 @@ class ScaffoldCommand extends Command
         $entity = ucfirst($this->argument('entity'));
         $table = Str::plural(strtolower($entity));
         $migrationPath = database_path('migrations');
-        $migrationFiles = File::glob("{$migrationPath}/*_create_{$table}_table.php");
+        $migrationFiles = File::glob("{$migrationPath}/*_create_". Str::plural(Str::snake($this->argument('entity'))) ."_table.php");
         if (empty($migrationFiles)) {
             $this->error("Migrate '{$entity}' not found.");
         } else {
