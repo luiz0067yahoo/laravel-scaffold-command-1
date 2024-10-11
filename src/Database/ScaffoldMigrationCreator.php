@@ -38,7 +38,7 @@ class ScaffoldMigrationCreator extends MigrationCreator
     public function createMigration($name, $path, $fields, $table = null, $create = false)
     {
     
-        $file_name="_create_". Str::plural(Str::snake($name)) ."_table";
+        $file_name="create_". Str::plural(Str::snake($name)) ."_table";
         $this->ensureMigrationDoesntAlreadyExist($name, $path);
 
         // First we will get the stub file for the migration, which serves as a type
