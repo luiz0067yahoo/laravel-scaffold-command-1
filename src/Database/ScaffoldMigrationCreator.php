@@ -76,8 +76,8 @@ class ScaffoldMigrationCreator extends MigrationCreator
 
         $replace = [
             'DummyClass' => $this->getClassName($name),
-	    '{{ table_name }}' => Str::snake($name),
-	    '{{table_name}}' =>Str::snake($name),
+	    '{{ table_name }}' => Str::snake($table),
+	    '{{table_name}}' =>Str::snake($table),
             '{{ class }}' => $this->getClassName($name),
             '{{class}}' => $this->getClassName($name),
             '{{ columns }}' => $columns,
