@@ -1,6 +1,8 @@
 
 # laravel scaffold command
-
+```bash
+composer require luiz0067yahoo/laravel-scaffold-command-1:dev-main
+```
 ## create all necessary files for crud operation with one command
 - model
 - resource controller, api or just regular crud controller
