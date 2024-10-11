@@ -43,9 +43,9 @@ php artisan scaffold Category --fields=name:string,slug:string,parent_id:foreign
 
 ```
 
-php artisan delete
+php artisan delete all elements
 ```bash
 
-like php artisan scaffold  Category --remove
+php artisan scaffold  Category --remove
 
 ```
